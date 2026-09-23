@@ -1,0 +1,105 @@
+@page
+@model IndexModel
+@{
+    ViewData["Title"] = "Dashboard - Pixel Vault";
+}
+
+<div class="dashboard-hero text-center mb-4">
+    <h1 class="display-5 fw-bold mb-1">🚀 Pixel Vault Dashboard</h1>
+    <p class="lead text-muted mb-0">Panoramica finanziaria in tempo reale.</p>
+</div>
+
+<!-- Schede KPI -->
+<div class="row g-3 mb-4">
+    <div class="col-6 col-md-3">
+        <div class="card shadow-sm border-0 border-start border-success border-4 h-100">
+            <div class="card-body">
+                <h6 class="text-muted text-uppercase fw-bold">💰 Fatturato Totale</h6>
+                <h3 class="fw-bold text-success mb-0">€ @Model.Summary.TotalRevenue.ToString("0.00")</h3>
+            </div>
+        </div>
+    </div>
+    <div class="col-6 col-md-3">
+        <div class="card shadow-sm border-0 border-start border-danger border-4 h-100">
+            <div class="card-body">
+                <h6 class="text-muted text-uppercase fw-bold">💸 Spese Totali</h6>
+                <h3 class="fw-bold text-danger mb-0">€ @Model.Summary.TotalExpenses.ToString("0.00")</h3>
+            </div>
+        </div>
+    </div>
+    <div class="col-6 col-md-3">
+        <div class="card shadow-sm border-0 border-start border-primary border-4 h-100">
+            <div class="card-body">
+                <h6 class="text-muted text-uppercase fw-bold">📈 Guadagno Netto</h6>
+                <h3 class="fw-bold @(Model.Summary.NetProfit >= 0 ? "text-primary" : "text-danger") mb-0">
+                    € @Model.Summary.NetProfit.ToString("0.00")
+                </h3>
+            </div>
+        </div>
+    </div>
+    <div class="col-6 col-md-3">
+        <div class="card shadow-sm border-0 border-start border-info border-4 h-100">
+            <div class="card-body">
+                <h6 class="text-muted text-uppercase fw-bold">📀 Copie Vendute</h6>
+                <h3 class="fw-bold text-info mb-0">@Model.Summary.TotalCopiesSold</h3>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row g-4 mb-4">
+    <!-- Catalogo & Accesso Rapido -->
+    <div class="col-lg-4">
+        <div class="card shadow-sm h-100">
+            <div class="card-header bg-white fw-bold">🎮 Catalogo</div>
+            <div class="card-body d-flex flex-column">
+                <p class="text-muted mb-1">Videogiochi a catalogo</p>
+                <h2 class="fw-bold text-primary mb-3">@Model.Summary.TotalGamesInCatalog</h2>
+                <div class="d-grid gap-2 mt-auto">
+                    <a asp-page="/Games/Index" class="btn btn-primary">🎮 Vai al Catalogo</a>
+                    <a asp-page="/Sales/Index" class="btn btn-outline-success">🛒 Registra una Vendita</a>
+                    <a asp-page="/Inventory/Index" class="btn btn-outline-secondary">📦 Gestisci Magazzino</a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Avvisi Sotto-scorta -->
+    <div class="col-lg-8">
+        <div class="card shadow-sm h-100">
+            <div class="card-header bg-white fw-bold d-flex justify-content-between align-items-center">
+                <span>⚠️ Prodotti Sotto-scorta</span>
+                <a asp-page="/Inventory/Index" class="btn btn-sm btn-outline-primary">Vai al Magazzino</a>
+            </div>
+            <div class="card-body p-0">
+                @if (!Model.LowStockItems.Any()) {
+                    <p class="text-muted text-center py-4 mb-0">✅ Nessun prodotto sotto-scorta al momento.</p>
+                }
+                else {
+                    <div class="table-responsive">
+                        <table class="table table-striped align-middle mb-0">
+                            <thead class="table-light">
+                                <tr>
+                                    <th>Gioco</th>
+                                    <th>Piattaforma</th>
+                                    <th class="text-end">Giacenza</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach (var item in Model.LowStockItems) {
+                                    <tr>
+                                        <td class="fw-bold">@item.GameTitle</td>
+                                        <td><span class="badge bg-secondary">@item.PlatformName</span></td>
+                                        <td class="text-end">
+                                            <span class="badge bg-warning text-dark">@item.StockQuantity copie</span>
+                                        </td>
+                                    </tr>
+                                }
+                            </tbody>
+                        </table>
+                    </div>
+                }
+            </div>
+        </div>
+    </div>
+</div>

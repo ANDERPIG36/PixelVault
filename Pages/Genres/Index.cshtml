@@ -1,0 +1,52 @@
+@page
+@model PixelVault.Pages.Genres.IndexModel
+@{
+    ViewData["Title"] = "Gestione Generi";
+}
+
+<div class="row">
+    <div class="col-md-5">
+        <div class="card shadow-sm mb-4">
+            <div class="card-header bg-primary text-white">
+                <h5 class="mb-0">➕ Aggiungi Genere</h5>
+            </div>
+            <div class="card-body">
+                <form method="post">
+                    <div class="mb-3">
+                        <label class="form-label font-weight-bold">Nome Genere *</label>
+                        <input asp-for="NewGenre.Name" class="form-control" placeholder="Es. Action RPG, Platform..." required />
+                    </div>
+                    <button type="submit" class="btn btn-success w-100">Salva Genere</button>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-7">
+        <div class="card shadow-sm">
+            <div class="card-header bg-dark text-white">
+                <h5 class="mb-0">🏷️ Generi Esistenti</h5>
+            </div>
+            <div class="card-body p-0">
+                <ul class="list-group list-group-flush">
+                    @if (!Model.Genres.Any()) {
+                        <li class="list-group-item text-muted text-center py-3">Nessun genere presente.</li>
+                    }
+                    else {
+                        @foreach (var genre in Model.Genres) {
+                            <li class="list-group-item d-flex justify-content-between align-items-center">
+                                <span class="fw-bold">@genre.Name</span>
+                                <div>
+                                    <span class="badge bg-secondary rounded-pill me-2">ID: @genre.Id</span>
+                                    <form method="post" asp-page-handler="Delete" asp-route-id="@genre.Id" onsubmit="return confirm('Confermi l\'eliminazione del genere?');" style="display:inline;">
+                                        <button type="submit" class="btn btn-sm btn-outline-danger">Rimuovi</button>
+                                    </form>
+                                </div>
+                            </li>
+                        }
+                    }
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>

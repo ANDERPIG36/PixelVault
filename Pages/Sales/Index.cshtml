@@ -1,0 +1,101 @@
+@page
+@model PixelVault.Pages.SalesPage.IndexModel
+@{
+    ViewData["Title"] = "Gestione Cassa & Vendite";
+}
+
+<!-- Messaggi di Avviso/Errore -->
+@if (!string.IsNullOrEmpty(Model.ErrorMessage)) {
+    <div class="alert alert-danger alert-dismissible fade show" role="alert">
+        ⚠️ <strong>Errore:</strong> @Model.ErrorMessage
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
+}
+
+@if (!string.IsNullOrEmpty(Model.SuccessMessage)) {
+    <div class="alert alert-success alert-dismissible fade show" role="alert">
+        ✅ @Model.SuccessMessage
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
+}
+
+<div class="row mb-4">
+    <div class="col-md-4">
+        <div class="card shadow-sm">
+            <div class="card-header bg-success text-white">
+                <h5 class="mb-0">🛒 Nuova Transazione Cassa</h5>
+            </div>
+            <div class="card-body">
+                <form method="post">
+                    <div class="mb-3">
+                        <label class="form-label font-weight-bold">Gioco *</label>
+                        <select asp-for="NewSale.GameId" asp-items="Model.GamesList" class="form-select" required>
+                            <option value="">-- Seleziona Gioco --</option>
+                        </select>
+                    </div>
+
+                    <div class="mb-3">
+                        <label class="form-label font-weight-bold">Piattaforma *</label>
+                        <select asp-for="NewSale.PlatformId" asp-items="Model.PlatformsList" class="form-select" required>
+                            <option value="">-- Seleziona Piattaforma --</option>
+                        </select>
+                    </div>
+
+                    <div class="mb-3">
+                        <label class="form-label font-weight-bold">Quantità Copie *</label>
+                        <input asp-for="NewSale.Quantity" type="number" min="1" class="form-control" value="1" required />
+                    </div>
+
+                    <button type="submit" class="btn btn-success w-100">Registra Vendita</button>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-8">
+        <div class="card shadow-sm">
+            <div class="card-header bg-dark text-white d-flex justify-content-between align-items-center">
+                <h5 class="mb-0">🧾 Storico Transazioni</h5>
+            </div>
+            <div class="card-body p-0">
+                <div class="table-responsive">
+                    <table class="table table-striped table-hover align-middle mb-0">
+                        <thead class="table-secondary">
+                            <tr>
+                                <th>Data/Ora</th>
+                                <th>Gioco</th>
+                                <th>Piattaforma</th>
+                                <th>Qtà</th>
+                                <th>Listino</th>
+                                <th>Sconto</th>
+                                <th>Totale Incassato</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @if (!Model.SalesList.Any()) {
+                                <tr>
+                                    <td colspan="7" class="text-center py-4 text-muted">
+                                        Nessuna vendita registrata.
+                                    </td>
+                                </tr>
+                            }
+                            else {
+                                @foreach (var sale in Model.SalesList) {
+                                    <tr>
+                                        <td>@sale.SaleDate.ToLocalTime().ToString("dd/MM/yyyy HH:mm")</td>
+                                        <td class="fw-bold">@sale.GameTitle</td>
+                                        <td><span class="badge bg-secondary">@sale.PlatformName</span></td>
+                                        <td>@sale.Quantity</td>
+                                        <td>€ @sale.UnitPrice.ToString("0.00")</td>
+                                        <td>@sale.DiscountApplied%</td>
+                                        <td class="fw-bold text-success">€ @sale.TotalAmount.ToString("0.00")</td>
+                                    </tr>
+                                }
+                            }
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,52 @@
+@page
+@model PixelVault.Pages.Developers.IndexModel
+@{
+    ViewData["Title"] = "Gestione Sviluppatori";
+}
+
+<div class="row">
+    <div class="col-md-5">
+        <div class="card shadow-sm mb-4">
+            <div class="card-header bg-primary text-white">
+                <h5 class="mb-0">➕ Aggiungi Sviluppatore</h5>
+            </div>
+            <div class="card-body">
+                <form method="post">
+                    <div class="mb-3">
+                        <label class="form-label font-weight-bold">Nome Software House *</label>
+                        <input asp-for="NewDeveloper.Name" class="form-control" placeholder="Es. FromSoftware, Naughty Dog..." required />
+                    </div>
+                    <button type="submit" class="btn btn-success w-100">Salva Sviluppatore</button>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-7">
+        <div class="card shadow-sm">
+            <div class="card-header bg-dark text-white">
+                <h5 class="mb-0">💻 Sviluppatori Esistenti</h5>
+            </div>
+            <div class="card-body p-0">
+                <ul class="list-group list-group-flush">
+                    @if (!Model.Developers.Any()) {
+                        <li class="list-group-item text-muted text-center py-3">Nessun sviluppatore presente.</li>
+                    }
+                    else {
+                        @foreach (var dev in Model.Developers) {
+                            <li class="list-group-item d-flex justify-content-between align-items-center">
+                                <span class="fw-bold">@dev.Name</span>
+                                <div>
+                                    <span class="badge bg-secondary rounded-pill me-2">ID: @dev.Id</span>
+                                    <form method="post" asp-page-handler="Delete" asp-route-id="@dev.Id" onsubmit="return confirm('Confermi l\'eliminazione dello sviluppatore?');" style="display:inline;">
+                                        <button type="submit" class="btn btn-sm btn-outline-danger">Rimuovi</button>
+                                    </form>
+                                </div>
+                            </li>
+                        }
+                    }
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>

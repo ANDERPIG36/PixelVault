@@ -1,0 +1,95 @@
+@page
+@model PixelVault.Pages.Inventory.IndexModel
+@{
+    ViewData["Title"] = "Magazzino & Ordini";
+}
+
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <h2>📦 Gestione Magazzino & Ordini Stock</h2>
+</div>
+
+<div class="row g-4">
+    <!-- Tabella Stato Stock Magazzino -->
+    <div class="col-lg-8">
+        <div class="card shadow-sm">
+            <div class="card-header bg-white fw-bold">Giacenze Magazzino</div>
+            <div class="card-body p-0">
+                <div class="table-responsive">
+                    <table class="table table-hover align-middle mb-0">
+                        <thead class="table-light">
+                            <tr>
+                                <th>Gioco</th>
+                                <th>Piattaforma</th>
+                                <th>Giacenza</th>
+                                <th>Stato</th>
+                                <th>Azione</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var item in Model.Items)
+                            {
+                                <tr>
+                                    <td class="fw-bold">@item.GameTitle</td>
+                                    <td><span class="badge bg-secondary">@item.PlatformName</span></td>
+                                    <td>@item.StockQuantity copie</td>
+                                    <td>
+                                        @if (item.IsLowStock)
+                                        {
+                                            <span class="badge bg-warning text-dark">⚠️ Sotto-scorta</span>
+                                        }
+                                        else
+                                        {
+                                            <span class="badge bg-success">Disponibile</span>
+                                        }
+                                    </td>
+                                    <td>
+                                        <a asp-page="/Inventory/Index" asp-route-selectedGameId="@item.GameId" class="btn btn-sm btn-outline-primary">
+                                            🛒 Riordina
+                                        </a>
+                                    </td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modulo Ordina Prodotto / Carica Stock -->
+    <div class="col-lg-4">
+        <div class="card shadow-sm">
+            <div class="card-header bg-primary text-white fw-bold">➕ Ordina Prodotto / Stock</div>
+            <div class="card-body">
+                <form method="post" asp-page-handler="Order">
+                    <div class="mb-3">
+                        <label class="form-label">Gioco</label>
+                        <select asp-for="OrderInput.GameId" asp-items="Model.GameList" class="form-select" required>
+                            <option value="">-- Seleziona Gioco --</option>
+                        </select>
+                    </div>
+
+                    <div class="mb-3">
+                        <label class="form-label">Piattaforma</label>
+                        <select asp-for="OrderInput.PlatformId" asp-items="Model.PlatformList" class="form-select" required>
+                            <option value="">-- Seleziona Piattaforma --</option>
+                        </select>
+                    </div>
+
+                    <div class="mb-3">
+                        <label class="form-label">Copie da ordinare</label>
+                        <input asp-for="OrderInput.Quantity" type="number" min="1" class="form-control" required />
+                    </div>
+
+                    <div class="mb-3">
+                        <label class="form-label">Prezzo di Acquisto Unitario (€)</label>
+                        <input asp-for="OrderInput.PurchaseUnitPrice" type="number" step="0.01" min="0" class="form-control" placeholder="es. 25.00" required />
+                        <div class="form-text">Genererà automaticamente una registrazione di Spesa.</div>
+                    </div>
+
+                    <button type="submit" class="btn btn-success w-100">Conferma Ordine e Aggiorna Stock</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>

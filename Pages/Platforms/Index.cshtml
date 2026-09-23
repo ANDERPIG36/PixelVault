@@ -1,0 +1,52 @@
+@page
+@model PixelVault.Pages.Platforms.IndexModel
+@{
+    ViewData["Title"] = "Gestione Piattaforme";
+}
+
+<div class="row">
+    <div class="col-md-5">
+        <div class="card shadow-sm mb-4">
+            <div class="card-header bg-primary text-white">
+                <h5 class="mb-0">➕ Aggiungi Piattaforma</h5>
+            </div>
+            <div class="card-body">
+                <form method="post">
+                    <div class="mb-3">
+                        <label class="form-label font-weight-bold">Nome Piattaforma *</label>
+                        <input asp-for="NewPlatform.Name" class="form-control" placeholder="Es. PlayStation 5, PC, Nintendo Switch..." required />
+                    </div>
+                    <button type="submit" class="btn btn-success w-100">Salva Piattaforma</button>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-7">
+        <div class="card shadow-sm">
+            <div class="card-header bg-dark text-white">
+                <h5 class="mb-0">🎮 Piattaforme Esistenti</h5>
+            </div>
+            <div class="card-body p-0">
+                <ul class="list-group list-group-flush">
+                    @if (!Model.Platforms.Any()) {
+                        <li class="list-group-item text-muted text-center py-3">Nessuna piattaforma presente.</li>
+                    }
+                    else {
+                        @foreach (var platform in Model.Platforms) {
+                            <li class="list-group-item d-flex justify-content-between align-items-center">
+                                <span class="fw-bold">@platform.Name</span>
+                                <div>
+                                    <span class="badge bg-secondary rounded-pill me-2">ID: @platform.Id</span>
+                                    <form method="post" asp-page-handler="Delete" asp-route-id="@platform.Id" onsubmit="return confirm('Confermi l\'eliminazione della piattaforma?');" style="display:inline;">
+                                        <button type="submit" class="btn btn-sm btn-outline-danger">Rimuovi</button>
+                                    </form>
+                                </div>
+                            </li>
+                        }
+                    }
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>

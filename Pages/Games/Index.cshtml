@@ -1,0 +1,112 @@
+@page
+@model PixelVault.Pages.Games.IndexModel
+@{
+    ViewData["Title"] = "Catalogo Videogiochi";
+}
+
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <h2>🎮 Catalogo Videogiochi</h2>
+    <a asp-page="Create" class="btn btn-primary">+ Aggiungi Nuovo Gioco</a>
+</div>
+
+<!-- Form dei Filtri di Ricerca -->
+<div class="card mb-4 shadow-sm">
+    <div class="card-body">
+        <form method="get" class="row g-3">
+            <div class="col-md-3">
+                <label class="form-label font-weight-bold">Titolo</label>
+                <input type="text" asp-for="SearchTitle" class="form-control" placeholder="Cerca per titolo..." />
+            </div>
+            <div class="col-md-3">
+                <label class="form-label font-weight-bold">Genere</label>
+                <select asp-for="SelectedGenreId" asp-items="Model.GenresList" class="form-select">
+                    <option value="">-- Tutti i Generi --</option>
+                </select>
+            </div>
+            <div class="col-md-3">
+                <label class="form-label font-weight-bold">Sviluppatore</label>
+                <select asp-for="SelectedDeveloperId" asp-items="Model.DevelopersList" class="form-select">
+                    <option value="">-- Tutti gli Sviluppatori --</option>
+                </select>
+            </div>
+            <div class="col-md-3">
+                <label class="form-label font-weight-bold">Editore</label>
+                <select asp-for="SelectedPublisherId" asp-items="Model.PublishersList" class="form-select">
+                    <option value="">-- Tutti gli Editori --</option>
+                </select>
+            </div>
+            <div class="col-12 text-end">
+                <a asp-page="Index" class="btn btn-outline-secondary me-2">Resetta Filtri</a>
+                <button type="submit" class="btn btn-success">Filtra Risultati</button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<!-- Tabella Giochi -->
+<div class="table-responsive shadow-sm rounded">
+    <table class="table table-striped table-hover align-middle mb-0">
+        <thead class="table-dark">
+            <tr>
+                <th>Titolo</th>
+                <th>Genere</th>
+                <th>Sviluppatore</th>
+                <th>Editore</th>
+                <th>Data Uscita</th>
+                <th>Valutazione</th>
+                <th>Prezzo Listino</th>
+                <th>Sconto</th>
+                <th>Prezzo Finale</th>
+                <th class="text-center" style="min-width: 110px;">Azioni</th>
+            </tr>
+        </thead>
+        <tbody>
+            @if (!Model.Games.Any()) {
+                <tr>
+                    <td colspan="10" class="text-center py-4 text-muted">
+                        Nessun videogioco trovato con i criteri di ricerca selezionati.
+                    </td>
+                </tr>
+            }
+            else {
+                @foreach (var game in Model.Games) {
+                    <tr>
+                        <td class="fw-bold">@game.Title</td>
+                        <td>
+                            @if (game.GenreNames != null && game.GenreNames.Any()) {
+                                @foreach (var genreName in game.GenreNames) {
+                                    <span class="badge bg-secondary me-1">@genreName</span>
+                                }
+                            }
+                            else {
+                                <span class="text-muted">N/D</span>
+                            }
+                        </td>
+                        <td>@game.DeveloperName</td>
+                        <td>@game.PublisherName</td>
+                        <td>@game.ReleaseDate.ToString("dd/MM/yyyy")</td>
+                        <td>⭐ @game.Rating.ToString("0.0")</td>
+                        <td>€ @game.Price.ToString("0.00")</td>
+                        <td>
+                            @if (game.Discount > 0) {
+                                <span class="badge bg-danger">-@game.Discount%</span>
+                            }
+                            else {
+                                <span class="text-muted">0%</span>
+                            }
+                        </td>
+                        <td class="fw-bold text-success">€ @game.FinalPrice.ToString("0.00")</td>
+                        <td class="text-center">
+                            <div class="d-flex flex-column gap-1 mx-auto" style="max-width: 90px;">
+                                <a asp-page="./Edit" asp-route-id="@game.Id" class="btn btn-sm btn-outline-warning w-100">Modifica</a>
+                                <form method="post" asp-page-handler="Delete" asp-route-id="@game.Id" onsubmit="return confirm('Sei sicuro di voler eliminare questo gioco dal catalogo?');" class="m-0 w-100">
+                                    <button type="submit" class="btn btn-sm btn-outline-danger w-100">Rimuovi</button>
+                                </form>
+                            </div>
+                        </td>
+                    </tr>
+                }
+            }
+        </tbody>
+    </table>
+</div>

@@ -1,0 +1,2 @@
+-le date devono essere tutte in formato gg/mm/aaaa anche quando le inserisce l'utente
+-sistemare lo sconto in modo che sia da 1 a 100 anzichè da 1 a 10

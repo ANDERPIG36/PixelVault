@@ -1,0 +1,223 @@
+/* ==========================================================================
+   PixelVault - Global Custom Styles
+   ========================================================================== */
+
+:root {
+    --pv-primary: #6366f1;
+    --pv-primary-hover: #4f46e5;
+    --pv-secondary: #0ea5e9;
+    --pv-dark-bg: #0f172a;
+    --pv-card-bg: #ffffff;
+    --pv-border-color: #e2e8f0;
+    --pv-text-muted: #64748b;
+    --pv-radius: 0.75rem;
+    --pv-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -2px rgba(0, 0, 0, 0.05);
+    --pv-shadow-hover: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -4px rgba(0, 0, 0, 0.05);
+}
+
+html {
+    font-size: 14px;
+    position: relative;
+    min-height: 100%;
+}
+
+@media (min-width: 768px) {
+    html {
+        font-size: 16px;
+    }
+}
+
+body {
+    background-color: #f8fafc;
+    color: #1e293b;
+    font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+    margin-bottom: 70px;
+}
+
+/* Accessibilità e Focus Outline */
+.btn:focus, 
+.btn:active:focus, 
+.btn-link.nav-link:focus, 
+.form-control:focus, 
+.form-select:focus,
+.form-check-input:focus {
+    box-shadow: 0 0 0 0.2rem rgba(99, 102, 241, 0.25);
+    border-color: var(--pv-primary);
+}
+
+/* ==========================================================================
+   Header & Navbar Navigation
+   ========================================================================== */
+
+.navbar {
+    background-color: #ffffff !important;
+    box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.05);
+    padding: 0.8rem 1rem;
+}
+
+.navbar-brand {
+    font-size: 1.35rem;
+    background: linear-gradient(135deg, var(--pv-primary), var(--pv-secondary));
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+    letter-spacing: -0.5px;
+}
+
+.nav-link {
+    font-weight: 500;
+    color: #334155 !important;
+    padding: 0.5rem 0.85rem !important;
+    transition: color 0.2s ease-in-out;
+}
+
+.nav-link:hover {
+    color: var(--pv-primary) !important;
+}
+
+/* Dropdown Menu e Hover */
+@media (min-width: 992px) {
+    .dropdown-hover:hover .dropdown-menu {
+        display: block;
+        margin-top: 0;
+        animation: fadeIn 0.15s ease-in-out;
+    }
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(4px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+.dropdown-menu {
+    border: 1px solid var(--pv-border-color);
+    border-radius: var(--pv-radius);
+    padding: 0.5rem;
+    box-shadow: var(--pv-shadow-hover);
+}
+
+.dropdown-item {
+    border-radius: 0.375rem;
+    padding: 0.5rem 0.85rem;
+    font-weight: 500;
+    transition: background-color 0.15s ease, color 0.15s ease;
+}
+
+.dropdown-item:hover {
+    background-color: #e0e7ff;
+    color: var(--pv-primary-hover);
+}
+
+/* ==========================================================================
+   Cards & Content Containers
+   ========================================================================== */
+
+.card {
+    border: 1px solid var(--pv-border-color);
+    border-radius: var(--pv-radius);
+    box-shadow: var(--pv-shadow);
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.card:hover {
+    box-shadow: var(--pv-shadow-hover);
+}
+
+.card-header {
+    border-bottom: 1px solid var(--pv-border-color);
+    font-weight: 600;
+    padding: 1rem 1.25rem;
+}
+
+/* ==========================================================================
+   Tables & Data Presentation
+   ========================================================================== */
+
+.table-responsive {
+    border-radius: var(--pv-radius);
+    overflow: hidden;
+}
+
+.table {
+    margin-bottom: 0;
+}
+
+.table thead th {
+    font-weight: 600;
+    font-size: 0.85rem;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    padding: 0.85rem 1rem;
+}
+
+.table tbody td {
+    padding: 0.85rem 1rem;
+    vertical-align: middle;
+}
+
+/* Badges e Indicatori */
+.badge {
+    font-weight: 600;
+    padding: 0.35em 0.65em;
+    border-radius: 0.375rem;
+}
+
+/* Colonna Azioni nelle tabelle (es. Catalogo Giochi) */
+.table td .btn-sm {
+    min-width: 80px;
+}
+
+/* ==========================================================================
+   Forms & Controls
+   ========================================================================== */
+
+.form-control, .form-select {
+    border-radius: 0.5rem;
+    border: 1px solid #cbd5e1;
+    padding: 0.6rem 0.85rem;
+}
+
+.form-label {
+    font-size: 0.9rem;
+    color: #475569;
+    margin-bottom: 0.4rem;
+}
+
+.btn {
+    border-radius: 0.5rem;
+    padding: 0.55rem 1.1rem;
+    font-weight: 600;
+    transition: all 0.15s ease-in-out;
+}
+
+.btn-primary {
+    background-color: var(--pv-primary);
+    border-color: var(--pv-primary);
+}
+
+.btn-primary:hover {
+    background-color: var(--pv-primary-hover);
+    border-color: var(--pv-primary-hover);
+}
+
+/* ==========================================================================
+   Dashboard
+   ========================================================================== */
+
+.dashboard-hero {
+    padding: 1.5rem 1rem 0.5rem;
+}
+
+/* ==========================================================================
+   Footer
+   ========================================================================== */
+
+.footer {
+    position: absolute;
+    bottom: 0;
+    width: 100%;
+    height: 60px;
+    line-height: 60px;
+    background-color: #ffffff;
+    border-top: 1px solid var(--pv-border-color) !important;
+}
