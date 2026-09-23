@@ -1,4 +1,5 @@
 using MongoDB.Driver;
+using PixelVault.Models;
 using PixelVault.Services;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -14,6 +15,7 @@ builder.Services.AddScoped<IMongoDatabase>(sp => {
     return client.GetDatabase(databaseName);
 });
 
+// Registrazione servizi dell'applicazione
 builder.Services.AddScoped<GameService>();
 builder.Services.AddScoped<GenreService>();
 builder.Services.AddScoped<PlatformService>();
@@ -23,6 +25,10 @@ builder.Services.AddScoped<InventoryService>();
 builder.Services.AddScoped<SaleService>();
 builder.Services.AddScoped<ExpenseService>();
 builder.Services.AddScoped<StatisticsService>();
+
+// Registrazione HttpClient e del servizio di importazione da API esterne
+builder.Services.AddHttpClient();
+builder.Services.AddScoped<GameImporterService>();
 
 // Add services to the container.
 builder.Services.AddRazorPages();
@@ -46,10 +52,28 @@ app.MapStaticAssets();
 app.MapRazorPages()
    .WithStaticAssets();
 
+// Inizializzazione Indici e Importazione Dati Reali al primo avvio
 using (var scope = app.Services.CreateScope())
 {
     var database = scope.ServiceProvider.GetRequiredService<IMongoDatabase>();
+    var importer = scope.ServiceProvider.GetRequiredService<GameImporterService>();
+
+    // 1. Inizializza gli indici del DB
     await DbInitializer.InitializeIndexesAsync(database);
+
+    // 2. Se la collezione dei giochi è vuota, effettua l'importazione live
+    var gamesCount = await database.GetCollection<Game>("Games").CountDocumentsAsync(_ => true);
+    if (gamesCount == 0)
+    {
+        // Legge la chiave API definita in appsettings.json sotto "RawgSettings:ApiKey"
+        var rawgApiKey = builder.Configuration["RawgSettings:ApiKey"];
+
+        if (!string.IsNullOrWhiteSpace(rawgApiKey) && rawgApiKey != "INSERISCI_QUI_LA_TUA_RAWG_API_KEY")
+        {
+            // Scarica 2 pagine di giochi reali popolari (40 giochi con Metacritic e prezzi reali da CheapShark)
+            await importer.ImportRealGamesAsync(rawgApiKey, pageCount: 2);
+        }
+    }
 }
 
 app.Run();

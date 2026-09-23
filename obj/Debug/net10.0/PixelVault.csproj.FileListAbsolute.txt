@@ -208,3 +208,4 @@
 /home/ANDERPIG36/Programmazione/C#/PixelVault/obj/Debug/net10.0/PixelVault.pdb
 /home/ANDERPIG36/Programmazione/C#/PixelVault/obj/Debug/net10.0/PixelVault.genruntimeconfig.cache
 /home/ANDERPIG36/Programmazione/C#/PixelVault/obj/Debug/net10.0/ref/PixelVault.dll
+/home/ANDERPIG36/Programmazione/C#/PixelVault/obj/Debug/net10.0/PixelVault.sourcelink.json
