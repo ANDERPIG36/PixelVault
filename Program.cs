@@ -53,8 +53,7 @@ app.MapRazorPages()
    .WithStaticAssets();
 
 // Inizializzazione Indici e Importazione Dati Reali al primo avvio
-using (var scope = app.Services.CreateScope())
-{
+using (var scope = app.Services.CreateScope()) {
     var database = scope.ServiceProvider.GetRequiredService<IMongoDatabase>();
     var importer = scope.ServiceProvider.GetRequiredService<GameImporterService>();
 
@@ -63,13 +62,11 @@ using (var scope = app.Services.CreateScope())
 
     // 2. Se la collezione dei giochi è vuota, effettua l'importazione live
     var gamesCount = await database.GetCollection<Game>("Games").CountDocumentsAsync(_ => true);
-    if (gamesCount == 0)
-    {
+    if (gamesCount == 0) {
         // Legge la chiave API definita in appsettings.json sotto "RawgSettings:ApiKey"
         var rawgApiKey = builder.Configuration["RawgSettings:ApiKey"];
 
-        if (!string.IsNullOrWhiteSpace(rawgApiKey) && rawgApiKey != "INSERISCI_QUI_LA_TUA_RAWG_API_KEY")
-        {
+        if (!string.IsNullOrWhiteSpace(rawgApiKey)) {
             // Scarica 2 pagine di giochi reali popolari (40 giochi con Metacritic e prezzi reali da CheapShark)
             await importer.ImportRealGamesAsync(rawgApiKey, pageCount: 2);
         }
